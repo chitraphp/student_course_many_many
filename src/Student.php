@@ -107,10 +107,10 @@ class Student
         $student_courses = $query->fetchAll(PDO::FETCH_ASSOC);
         $all_student_courses = array();
         foreach($student_courses as $student_course {
-            $student_id = $student_course['id'];
+            $course_id = $student_course['id'];
             $course = $student_course['course'];
             $course_number = $student_course['course_number'];
-            $new_course = new Course($course, $course_number);
+            $new_course = new Course($course, $course_number,$course_id);
             array_push($all_student_courses, $new_course);
         }
             return $all_student_courses;
