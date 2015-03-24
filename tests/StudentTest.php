@@ -270,26 +270,7 @@
             //Assert
             $this->assertEquals($test_student->getCourses(), [$test_course, $test_course2]);
             //$this->assertEquals([$test_course, $test_course2],$result);
-        //    $this->assertEquals("Chitra",$result);
+            //$this->assertEquals("Chitra",$result);
         }
-        // //When we call delete on a task it should delete all mention of that task from both the tasks table and the join table.
-        // function testDelete()
-        // {
-        //     //Arrange
-        //     $name = "Work stuff";
-        //     $id = 1;
-        //     $test_category = new Course($name, $id);
-        //     $test_category->save();
-        //     $name = "File reports";
-        //     $id2 = 2;
-        //     $test_task = new Student($name, $id2);
-        //     $test_task->save();
-        //     //Act
-        //     $test_task->addCategory($test_category);
-        //     $test_task->delete();
-        //     //Assert
-        //     $this->assertEquals([], $test_category->getStudents());
-        // }
-
     }
 ?>
