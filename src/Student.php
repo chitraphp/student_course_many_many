@@ -103,19 +103,17 @@ class Student
 
     function getCourses()
     {
-        $query = $GLOBALS['DB']->query("SELECT course_id FROM enrollments WHERE student_id = {$this->getStudentId()};");
-        $course_ids = $query->fetchAll(PDO::FETCH_ASSOC);
-        $courses = array();
-        foreach($course_ids as $id) {
-            $course_id = $id['course_id'];
-            $result = $GLOBALS['DB']->query("SELECT * FROM courses WHERE id ={$course_id};");
-            $returned_course = $result->fetchAll(PDO::FETCH_ASSOC);
-            $name = $returned_course[0]['name'];
-            $id = $returned_course[0]['id'];
-            $new_course = new Course($name, $id);
-            array_push($courses, $new_course);
+        $query = $GLOBALS['DB']->query("SELECT courses.* FROM students JOIN enrollments ON (students.id = enrollments.student_id) JOIN courses ON (enrollments.course_id = courses.id) WHERE students.id={$this->getStudentId()};");
+        $student_courses = $query->fetchAll(PDO::FETCH_ASSOC);
+        $all_student_courses = array();
+        foreach($student_courses as $student_course {
+            $student_id = $student_course['id'];
+            $course = $student_course['course'];
+            $course_number = $student_course['course_number'];
+            $new_course = new Course($course, $course_number);
+            array_push($all_student_courses, $new_course);
         }
-            return $courses;
+            return $all_student_courses;
     }
 
 
