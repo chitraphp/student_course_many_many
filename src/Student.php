@@ -5,7 +5,7 @@ class Student
     private $student_id;
     private $enroll_date;
 
-    function __construct($student_name,$enroll_date,$student_id)
+    function __construct($student_name,$enroll_date,$student_id = null)
     {
         $this->student_name = $student_name;
         $this->enroll_date = $enroll_date;
@@ -45,9 +45,9 @@ class Student
 
     function save()
     {
-        $statement = $GLOBALS['DB']->query("INSERT INTO students (name, enrollment_date) VALUES ('{$this->getStudentName()}', ('{$this->getEnrollDate()}') RETURNING id;");
-            $result = $statement->fetch(PDO::FETCH_ASSOC);
-            $this->setStudentId($result['id']);
+        $statement = $GLOBALS['DB']->query("INSERT INTO students (name, enrollment_date) VALUES ('{$this->getStudentName()}', '{$this->getEnrollDate()}') RETURNING id;");
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        $this->setStudentId($result['id']);
     }
 
     static function getAll()
@@ -55,7 +55,7 @@ class Student
         $returned_students = $GLOBALS['DB']->query("SELECT * FROM students;");
         $students = array();
         foreach($returned_students as $student) {
-            $student_id = $student['id'];
+            $id = $student['id'];
             $student_name = $student['name'];
             $enroll_date = $student['enrollment_date'];
             $new_student = new Student($student_name,$enroll_date, $id);
@@ -87,6 +87,7 @@ class Student
     function update($new_name)
     {
         $GLOBALS['DB']->exec("UPDATE students SET name = '{$new_name}' WHERE id = {$this->getStudentId()};");
+        $this->setStudentName($new_name);
     }
 
     function deleteStudent()
@@ -96,7 +97,7 @@ class Student
     }
 
 //This adds the student to a specific course--indicates relationship in db
-    function addCourse()
+    function addCourse($course)
     {
         $GLOBALS['DB']->exec("INSERT INTO enrollments (student_id, course_id) VALUES ({$this->getStudentId()}, {$course->getCourseId()});");
     }
@@ -106,7 +107,7 @@ class Student
         $query = $GLOBALS['DB']->query("SELECT courses.* FROM students JOIN enrollments ON (students.id = enrollments.student_id) JOIN courses ON (enrollments.course_id = courses.id) WHERE students.id={$this->getStudentId()};");
         $student_courses = $query->fetchAll(PDO::FETCH_ASSOC);
         $all_student_courses = array();
-        foreach($student_courses as $student_course {
+        foreach($student_courses as $student_course) {
             $course_id = $student_course['id'];
             $course = $student_course['course'];
             $course_number = $student_course['course_number'];
@@ -115,15 +116,5 @@ class Student
         }
             return $all_student_courses;
     }
-
-
-
-
-
-
-
-
-
-
 }
 ?>
